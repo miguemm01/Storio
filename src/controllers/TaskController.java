@@ -103,7 +103,9 @@ public class TaskController{
         int counter;
         for(counter = 0; counter < this.getTaskList().size(); counter++){
             if(this.getTaskList().get(counter).getTaskID() == taskID){
-                task = this.getTaskList().get(counter);
+                if(!this.getTaskList().get(counter).getTaskName().equals("")){
+                    task = this.getTaskList().get(counter);
+                }
             }
         }
         return task;

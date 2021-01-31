@@ -180,9 +180,9 @@ public class Storio{
         System.out.println("#####Storio#####");
         System.out.println("################");
         System.out.println("----------------");
-        System.out.println("1.Add Task");
-        System.out.println("2.Remove Task");
-        System.out.println("3.Update Task");
+        System.out.println("1.Add task");
+        System.out.println("2.Remove task");
+        System.out.println("3.Update task");
         System.out.println("4.See task");
         System.out.println("5.Mark task as completed");
         System.out.println("6.See all tasks");

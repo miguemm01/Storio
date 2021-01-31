@@ -12,7 +12,7 @@ public class Task{
     public Task(){
         this.setTaskName("");
         this.setTaskDescription("");
-        this.setTaskDate(LocalDateTime.now());
+        this.setTaskDate(null);
         this.setTaskCompleted(false);
         this.setTaskID(0);
     }
