@@ -2,6 +2,7 @@ package controllers;
 
 import models.Task;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +112,34 @@ public class TaskController{
         return task;
     }
 
+    public boolean exportAllTasks(){
+        boolean success = false;
+        String exportedTask = "";
+        int counter = 0;
+        for(counter = 0; counter < this.getTaskList().size(); counter++){
+
+        }
+        return success;
+    }
+
+    public Task[] importAllTasks(){ //TODO
+        int counter;
+        Task taskArray[] = new Task[getDatabaseLength(new File("../resources/database"))];
+        for(counter = 0; counter < getDatabaseLength(new File("../resources/database")); counter++){
+            taskArray[counter] = importTask()
+        }
+    }
+
+    public boolean importTask(String exportedTask){
+        boolean success = false;
+        String exportedTaskArray[] = exportedTask.split("_");
+        Task task = new Task(exportedTaskArray[0], exportedTaskArray[1], exportedTaskArray[2], exportedTaskArray[3]);
+        if(this.getTaskList().add(task)){
+            success = true;
+        }
+        return success;
+    }
+
     public boolean completeTaskByID(int taskID){
         int counter;
         boolean success = false;
@@ -140,6 +169,26 @@ public class TaskController{
             }
         }
         return taskExists;
+    }
+
+    private int getDatabaseLength(File dbFile){
+        int lineCounter = 0;
+        try {
+            FileReader dbFileReader = new FileReader(dbFile);
+            BufferedReader dbFileBufferedReader = new BufferedReader(dbFileReader);
+            while(dbFileBufferedReader.readLine() != null){
+                lineCounter++;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lineCounter;
+    }
+
+    private String readDBLine(File dbFile){ //TODO
+
     }
 
 }

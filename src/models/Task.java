@@ -24,6 +24,13 @@ public class Task{
         this.setTaskID(taskID);
     }
 
+    public Task(String taskName, String taskDescription, String taskDate, String taskID){
+        this.setTaskName(taskName);
+        this.setTaskDescription(taskDescription);
+        this.setTaskDate(LocalDateTime.parse(taskDate));
+        this.setTaskID(Integer.parseInt(taskID));
+    }
+
     public int getTaskID() {
         return taskID;
     }
@@ -67,6 +74,12 @@ public class Task{
 
     public void setTaskCompleted(boolean taskCompleted) {
         this.taskCompleted = taskCompleted;
+    }
+
+    public String exportTask(){
+        String exportedTask = "";
+        exportedTask += this.getTaskName() + "_" + this.getTaskDescription() + "_" + this.getTaskDate() + "_" + this.getTaskID() + "\n";
+        return exportedTask;
     }
 
     public String toString(){
