@@ -112,33 +112,64 @@ public class TaskController{
         return task;
     }
 
-    public boolean exportAllTasks(){
+    public boolean exportTask(Task taskToBeExported){
         boolean success = false;
         String exportedTask = "";
-        int counter = 0;
-        for(counter = 0; counter < this.getTaskList().size(); counter++){
-
+        exportedTask += taskToBeExported.getTaskName() + "_" + taskToBeExported.getTaskDescription() + "_" + taskToBeExported.getTaskDate() + "_" + taskToBeExported.getTaskID() + "\n";
+        try {
+            FileWriter dbWriter = new FileWriter("src/resources/database", true);
+            dbWriter.write(exportedTask);
+            dbWriter.close();
+            success = true;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return success;
     }
 
-    public Task[] importAllTasks(){ //TODO
-        int counter;
-        Task taskArray[] = new Task[getDatabaseLength(new File("../resources/database"))];
-        for(counter = 0; counter < getDatabaseLength(new File("../resources/database")); counter++){
-            taskArray[counter] = importTask()
+    public boolean exportAllTasks(){
+        boolean success = false;
+        int counter = 0;
+        for(counter = 0; counter < this.getTaskList().size(); counter++){
+            if(!checkForDuplicates(new File("src/resources/database"))){
+                exportTask(this.getTaskList().get(counter));
+                success = true;
+            }
         }
+        return success;
     }
 
-    public boolean importTask(String exportedTask){
+    public boolean importAllTasks(){
+        int counter;
+        boolean success = false;
+        String exportedTask;
+        Task taskArray[] = new Task[getDatabaseLength(new File("src/resources/database"))];
+        for(counter = 0; counter < getDatabaseLength(new File("src/resources/database")); counter++){
+            exportedTask = readDBLine(new File("src/resources/database"));
+            taskArray[counter] = importTask(exportedTask);
+        }
+        for(counter = 0; counter < taskArray.length; counter++){
+            if(this.getTaskList().add(taskArray[counter])){
+                success = true;
+            }
+            else{
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    public Task importTask(String exportedTask){
         boolean success = false;
         String exportedTaskArray[] = exportedTask.split("_");
         Task task = new Task(exportedTaskArray[0], exportedTaskArray[1], exportedTaskArray[2], exportedTaskArray[3]);
         if(this.getTaskList().add(task)){
             success = true;
         }
-        return success;
+        return task;
     }
+
+
 
     public boolean completeTaskByID(int taskID){
         int counter;
@@ -171,7 +202,7 @@ public class TaskController{
         return taskExists;
     }
 
-    private int getDatabaseLength(File dbFile){
+    public int getDatabaseLength(File dbFile){
         int lineCounter = 0;
         try {
             FileReader dbFileReader = new FileReader(dbFile);
@@ -187,8 +218,68 @@ public class TaskController{
         return lineCounter;
     }
 
-    private String readDBLine(File dbFile){ //TODO
+    private String readDBLine(File dbFile){
+        String dbLine = "";
+        try {
+            FileReader dbFileReader = new FileReader(dbFile);
+            BufferedReader dbFileBufferedReader = new BufferedReader(dbFileReader);
+            dbLine = dbFileBufferedReader.readLine();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dbLine;
+    }
+
+    private boolean checkForDuplicates(File dbFile){ //TODO
+        boolean duplicated = false;
+        String dbLine = "";
+        FileReader dbFileReader = null;
+        int counter;
+        try {
+            dbFileReader = new FileReader(dbFile);
+            BufferedReader dbFileBufferedReader = new BufferedReader(dbFileReader);
+            dbLine = dbFileBufferedReader.readLine();
+            for(counter = 0; counter < this.getTaskList().size(); counter++){
+                if(this.getTaskList().get(counter).exportTask().equals(dbLine)){
+                    dbLine = dbFileBufferedReader.readLine();
+                    duplicated = true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return duplicated;
+    }
+
+
+
+    private void deleteDuplicates(File dbFile){ //TODO
+        String dbLine = "";
+        FileReader dbFileReader;
+        int counter, counter2;
+        try {
+            dbFileReader = new FileReader(dbFile);
+            BufferedReader dbFileBufferedReader = new BufferedReader(dbFileReader);
+            dbLine = dbFileBufferedReader.readLine();
+            for(counter = 0; counter < this.getTaskList().size(); counter++){
+                for(counter2 = 1; counter < this.getTaskList().size(); counter++){
+                    if(this.getTaskList().get(counter) == this.getTaskList().get(counter2)){
+
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+
 
 }

@@ -86,4 +86,6 @@ public class Task{
         String taskAll = "----------------\nTask Name: " + this.getTaskName() + "\nTask Description: " + this.getTaskDescription() + "\nTask Date: " + this.getTaskDate() + "\nIs Completed: " + this.isTaskCompleted() + "\nTask ID: " + this.getTaskID() + "\n----------------";
         return taskAll;
     }
+
+
 }
